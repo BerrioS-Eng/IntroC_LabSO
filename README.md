@@ -5,7 +5,7 @@
 
 ## 🚀 Members
 - Sebastian Andres Berrio Murillo, CC. 1066753315, sebastian.berriom@udea.edu.co.
-- Sandy Dahiana Ruiz Higuita, CC. 1028031733, Sadrh97@gmail.com.
+- Sandy Dahiana Ruiz Higuita, CC. 1028031733, sandy.ruizh@udea.edu.co - sadrh97@gmail.com.
 
 ## Compilación
 
@@ -98,7 +98,7 @@ echo "hola mundo" | ./wgrep "hola"
 
 ## wzip
 
-Implementación simplificada de una utilidad de compresión. Su función es comprimir uno o más archivos usando una técnica llamada RUn-Length Encoding RLE. Esta técnica reduce el tamaño de archivos que tienen muchos caracteres repetidos seguidos.
+Implementación simplificada de una utilidad de compresión. Su función es comprimir uno o más archivos usando una técnica llamada Run-Length Encoding RLE. Esta técnica reduce el tamaño de archivos que tienen muchos caracteres repetidos seguidos.
 
 ### Uso
 
@@ -118,13 +118,14 @@ Normalmente la salida se redirige a un archivo para guardar el resultado comprim
 - Lee cada archivo caracter por caracter.
 - Cuenta cuántas veces aparece el mismo carácter de forma consecutiva
 - Cuando el caracter cambia, guarda:
-    -El número de repeticiones
-    -El caracter repetifo
+    - El número de repeticiones
+    - El caracter repetido
 - La información comprimida se escribe en `stdout` en formato binario
 
 Por ejemplo si el archivo tiene: aaaaabbb
-La compresión guarda algo equivalente a: 5 a
-                                         3 b
+La compresión guarda algo equivalente a: 
+5 a
+3 b
 Pero en realidad guarda en formato binario usando `fwrite`
 
 ### Códigos de salida
@@ -162,13 +163,14 @@ Implementación simplificada de una utilidad de descompresión. Este programa to
 
 - Recibe uno o más archivos comprimidos como argumentos.
 - Lee los datos en bloques que contienen.
-    -El número de repeticiones
-    -El caracter asociado
+    - El número de repeticiones
+    - El caracter asociado
 - Luego imprime ese carácter la cantidad de veces indicada
 - La salida se escribe en `stdout` reconstruyendo el texto original
 
-Por ejemplo si el archivo contiene información equivalente a: 5 a
-                                                              3 b
+Por ejemplo si el archivo contiene información equivalente a:
+5 a
+3 b
 El programa imprimirá: aaaaabbb 
 
 ### Códigos de salida
