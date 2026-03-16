@@ -198,7 +198,7 @@ El programa imprimirá: aaaaabbb
 ./wunzip archivo.z
 ```
 
-### Ejemplo
+### Salida
 ```bash
 aaaaabbb
 ```
