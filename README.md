@@ -123,9 +123,13 @@ Normalmente la salida se redirige a un archivo para guardar el resultado comprim
 - La información comprimida se escribe en `stdout` en formato binario
 
 Por ejemplo si el archivo tiene: aaaaabbb
+
 La compresión guarda algo equivalente a: 
+
 5 a
+
 3 b
+
 Pero en realidad guarda en formato binario usando `fwrite`
 
 ### Códigos de salida
@@ -169,8 +173,11 @@ Implementación simplificada de una utilidad de descompresión. Este programa to
 - La salida se escribe en `stdout` reconstruyendo el texto original
 
 Por ejemplo si el archivo contiene información equivalente a:
+
 5 a
+
 3 b
+
 El programa imprimirá: aaaaabbb 
 
 ### Códigos de salida
