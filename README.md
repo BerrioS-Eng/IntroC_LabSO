@@ -96,21 +96,6 @@ echo "hola mundo" | ./wgrep "hola"
 ./wgrep "error" log1.txt log2.txt
 ```
 
-## Problemas y soluciones durante el desarrollo
-
-### wcat: Manejo del buffer y punteros con `fgets`
-
-**Problema:** Comprender cómo `fgets` utiliza un puntero a un arreglo de caracteres (`char buffer[60]`) para almacenar los datos leídos del archivo. La confusión principal fue entender que `buffer` actúa como un puntero al inicio del arreglo y que `fgets` escribe directamente en esa zona de memoria, requiriendo definir un tamaño fijo que limita la cantidad de caracteres leídos por iteración.
-
-**Solución:** Se revisó la documentación sobre arreglos y punteros en C para entender que el nombre del arreglo decae a un puntero (`char *`) al pasarse a `fgets`. Se definió un buffer de 60 caracteres y se iteró con `while` hasta alcanzar `EOF`, permitiendo que líneas más largas se lean en múltiples pasadas sin perder datos.
-
-### wgrep: Punteros y memoria dinámica con `getline`
-
-**Problema:** A diferencia de `wcat`, `wgrep` requería manejar líneas de longitud variable. Comprender cómo `getline` recibe un puntero a puntero (`char **line`) y un puntero a `size_t` para redimensionar el buffer dinámicamente fue el principal reto, ya que implica entender la indirección doble y la asignación de memoria en heap.
-
-**Solución:** Se estudió el comportamiento de `getline`: al inicializar `line = NULL` y `tam = 0`, la función asigna memoria automáticamente con `malloc` y la redimensiona según sea necesario. Esto eliminó la limitación del buffer fijo y se liberó la memoria al final con `free(line)`.
-
-
 ## wzip
 
 Implementación simplificada de una utilidad de compresión. Su función es comprimir uno o más archivos usando una técnica llamada RUn-Length Encoding RLE. Esta técnica reduce el tamaño de archivos que tienen muchos caracteres repetidos seguidos.
@@ -162,3 +147,66 @@ Pero en realidad guarda en formato binario usando `fwrite`
 ```
 
 ---
+
+## wunzip
+
+Implementación simplificada de una utilidad de descompresión. Este programa toma un archivo comprimido generado por `wzip` y reconstruye el contenido original.
+
+### Uso
+
+```bash
+./wunzip <archivo_comprimido>
+```
+
+### Comportamiento
+
+- Recibe uno o más archivos comprimidos como argumentos.
+- Lee los datos en bloques que contienen.
+    -El número de repeticiones
+    -El caracter asociado
+- Luego imprime ese carácter la cantidad de veces indicada
+- La salida se escribe en `stdout` reconstruyendo el texto original
+
+Por ejemplo si el archivo contiene información equivalente a: 5 a
+                                                              3 b
+El programa imprimirá: aaaaabbb 
+
+### Códigos de salida
+
+| Código | Significado |
+|--------|-------------|
+| 0 | Ejecución exitosa |
+| 1 | No se especificaron archivos o no se pudo abrir un archivo |
+
+### Errores
+
+- Sin argumentos: imprime `wunzip: file1 [file2 ...]` y retorna 1.
+- Archivo no encontrado: imprime `wunzip: cannot open file` y retorna 1.
+
+### Ejemplo
+
+```bash
+./wunzip archivo.z
+```
+
+### Ejemplo
+```bash
+aaaaabbb
+```
+
+---
+
+
+## Problemas y soluciones durante el desarrollo
+
+### wcat: Manejo del buffer y punteros con `fgets`
+
+**Problema:** Comprender cómo `fgets` utiliza un puntero a un arreglo de caracteres (`char buffer[60]`) para almacenar los datos leídos del archivo. La confusión principal fue entender que `buffer` actúa como un puntero al inicio del arreglo y que `fgets` escribe directamente en esa zona de memoria, requiriendo definir un tamaño fijo que limita la cantidad de caracteres leídos por iteración.
+
+**Solución:** Se revisó la documentación sobre arreglos y punteros en C para entender que el nombre del arreglo decae a un puntero (`char *`) al pasarse a `fgets`. Se definió un buffer de 60 caracteres y se iteró con `while` hasta alcanzar `EOF`, permitiendo que líneas más largas se lean en múltiples pasadas sin perder datos.
+
+### wgrep: Punteros y memoria dinámica con `getline`
+
+**Problema:** A diferencia de `wcat`, `wgrep` requería manejar líneas de longitud variable. Comprender cómo `getline` recibe un puntero a puntero (`char **line`) y un puntero a `size_t` para redimensionar el buffer dinámicamente fue el principal reto, ya que implica entender la indirección doble y la asignación de memoria en heap.
+
+**Solución:** Se estudió el comportamiento de `getline`: al inicializar `line = NULL` y `tam = 0`, la función asigna memoria automáticamente con `malloc` y la redimensiona según sea necesario. Esto eliminó la limitación del buffer fijo y se liberó la memoria al final con `free(line)`.
