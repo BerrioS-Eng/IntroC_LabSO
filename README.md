@@ -219,3 +219,15 @@ aaaaabbb
 **Problema:** A diferencia de `wcat`, `wgrep` requería manejar líneas de longitud variable. Comprender cómo `getline` recibe un puntero a puntero (`char **line`) y un puntero a `size_t` para redimensionar el buffer dinámicamente fue el principal reto, ya que implica entender la indirección doble y la asignación de memoria en heap.
 
 **Solución:** Se estudió el comportamiento de `getline`: al inicializar `line = NULL` y `tam = 0`, la función asigna memoria automáticamente con `malloc` y la redimensiona según sea necesario. Esto eliminó la limitación del buffer fijo y se liberó la memoria al final con `free(line)`.
+
+### wzip: contar correctamente caracteres repetidos
+
+**Problema:** Al implementar la compresión fue necesario entender cómo contar correctamente los caracteres repetidos mientras se lee el archivo carácter por carácter. También fue importante para nosotros manejar correctamente el momento en en que el caracter cambia para poder guardar esta información que se había comprimido.
+
+**Solución:** Utilizamos `fgetc` para leer cada caracter del archivo y también un contador que se aumenta cuando el caracter leído es igual al anterior. Cuando el caracter cambia, se escribe la cantidad de repeticiones y el caracter, usando `fwrite`. Esto nos permitió guardar los datos en formato binario.
+
+### wunzip: Lectura de datos binarios
+
+**Problema:** En la función `wunzip` nuestro principal reto fue entender cómo leer correctamente los datos que fueron guardados por `wzip`. Como el archivo comprimido tiene números y caracteres almacenados en fomato binario, no se podía usar `fgetc` o `getline` como en las anteriores funciones.
+
+**Solución:** Utilizamos la función fread para leer primero el número de repeticiones, que es un entero, y luego el caracter asociado. Esto nos permitió recuperar la información almacenada correctamente en el archivo comprimido.
