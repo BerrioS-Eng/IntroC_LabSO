@@ -109,3 +109,56 @@ echo "hola mundo" | ./wgrep "hola"
 **Problema:** A diferencia de `wcat`, `wgrep` requería manejar líneas de longitud variable. Comprender cómo `getline` recibe un puntero a puntero (`char **line`) y un puntero a `size_t` para redimensionar el buffer dinámicamente fue el principal reto, ya que implica entender la indirección doble y la asignación de memoria en heap.
 
 **Solución:** Se estudió el comportamiento de `getline`: al inicializar `line = NULL` y `tam = 0`, la función asigna memoria automáticamente con `malloc` y la redimensiona según sea necesario. Esto eliminó la limitación del buffer fijo y se liberó la memoria al final con `free(line)`.
+
+
+## wzip
+
+Implementación simplificada de una utilidad de compresión. Su función es comprimir uno o más archivos usando una técnica llamada RUn-Length Encoding RLE. Esta técnica reduce el tamaño de archivos que tienen muchos caracteres repetidos seguidos.
+
+### Uso
+
+```bash
+./wzip <archivo1> [archivo2] ... [archivoN]
+```
+
+Normalmente la salida se redirige a un archivo para guardar el resultado comprimido
+
+```bash
+./wzip archivo.txt >archivo.z
+```
+
+### Comportamiento
+
+- Recibe uno o más archivos como argumentos.
+- Lee cada archivo caracter por caracter.
+- Cuenta cuántas veces aparece el mismo carácter de forma consecutiva
+- Cuando el caracter cambia, guarda:
+    -El número de repeticiones
+    -El caracter repetifo
+- La información comprimida se escribe en `stdout` en formato binario
+
+Por ejemplo si el archivo tiene: aaaaabbb
+La compresión guarda algo equivalente a: 5 a
+                                         3 b
+Pero en realidad guarda en formato binario usando `fwrite`
+
+### Códigos de salida
+
+| Código | Significado |
+|--------|-------------|
+| 0 | Ejecución exitosa |
+| 1 | No se especificaron archivos o no se pudo abrir un archivo |
+
+### Errores
+
+- Sin argumentos: imprime `wzip: file1 [file2 ...]` y retorna 1.
+- Archivo no encontrado: imprime `wzip: cannot open file` y retorna 1.
+
+### Ejemplo
+
+```bash
+./wzip archivo.txt > archivo.z
+./wzip archivo1.txt archivo2.txt > comprimido.z
+```
+
+---
