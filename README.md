@@ -230,4 +230,4 @@ aaaaabbb
 
 **Problema:** En la función `wunzip` nuestro principal reto fue entender cómo leer correctamente los datos que fueron guardados por `wzip`. Como el archivo comprimido tiene números y caracteres almacenados en fomato binario, no se podía usar `fgetc` o `getline` como en las anteriores funciones.
 
-**Solución:** Utilizamos la función fread para leer primero el número de repeticiones, que es un entero, y luego el caracter asociado. Esto nos permitió recuperar la información almacenada correctamente en el archivo comprimido.
+**Solución:** Utilizamos la función `fread` para leer primero el número de repeticiones, que es un entero, y luego el caracter asociado. Esto nos permitió recuperar la información almacenada correctamente en el archivo comprimido.
